@@ -9,6 +9,7 @@
     See the file LICENSE for copying permission.
 """
 
+import cquery
 import checkCurrency
 import re
 import sys
@@ -82,14 +83,25 @@ class EchoBot(sleekxmpp.ClientXMPP):
         if msg['type'] in ('chat', 'normal'):
             text = msg['body']
             #msg.reply("Thanks for sending\n%(body)s" % msg).send()
-            pattern = '(exchange|ex)\s+([A-Z]{3})\s+([A-Z]{3})'
-            print text
-            print pattern
-            match_obj = re.match(pattern,text)
-            print match_obj
-            print re
-            if (match_obj):
+            pattern0 = '(exchange|ex)\s+([A-Z]{3})\s+([A-Z]{3})'
+
+            pattern1 = '6p header'
+            #print text
+            #print pattern
+                        #print match_obj
+            #print re
+            if (re.match(pattern0,text)):
+                match_obj = re.match(pattern0,text)
                 self.checkExchange(msg,match_obj.groups())
+            if (re.match(pattern1,text)):
+                self.check6park(msg)
+
+    def check6park(self,msg):
+        headers =cquery.cquery("http://cquery.com/api/fetch/?api_key=cq51251ee9c72ad&source_url=http://www.6park.com&css_selector=div%23parknews&data_type=text&response_format=raw&checkField=tomato") 
+        print headers
+        msg.reply(headers).send()
+
+             
 
     def checkExchange(self,msg,args):
         currency1 = args[1]
