@@ -1,1 +1,2 @@
+echo "starting gtalk client"
 python ex_client.py -j russell.ot@gmail.com -p vR000326
